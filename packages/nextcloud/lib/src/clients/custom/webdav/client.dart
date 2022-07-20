@@ -93,7 +93,7 @@ class WebDavClient {
           .join('/');
 
   String _buildPropsRequest(final Set<String> props) {
-    final builder = XmlBuilder();
+    final builder = xml.XmlBuilder();
     builder
       ..processing('xml', 'version="1.0"')
       ..element(
@@ -193,6 +193,24 @@ class WebDavClient {
         data: localData,
       );
 
+  /// Stream the content from [file] to [remotePath]
+  Future uploadFile(
+    final File file,
+    final FileStat fileStat,
+    final String remotePath, {
+    final Function(double progres)? onProgress,
+  }) async {
+    var uploaded = 0;
+    await uploadStream(
+      file.openRead().map((final chunk) {
+        uploaded += chunk.length;
+        onProgress?.call(uploaded / fileStat.size * 100);
+        return Uint8List.fromList(chunk);
+      }),
+      remotePath,
+    );
+  }
+
   /// download [remotePath] and store the response file contents to String
   Future<Uint8List> download(final String remotePath) async => Uint8List.fromList(
         (await (await _send(
@@ -211,18 +229,49 @@ class WebDavClient {
         [200],
       );
 
+  /// download [remotePath] and stream the content into [file]
+  Future downloadFile(
+    final String remotePath,
+    final File file, {
+    final Function(double progress)? onProgress,
+  }) async {
+    final sink = file.openWrite();
+    final completer = Completer();
+    final response = await downloadStream(remotePath);
+    var downloaded = 0;
+
+    response.listen((final chunk) async {
+      sink.add(chunk);
+      downloaded += chunk.length;
+      onProgress?.call(downloaded / response.contentLength * 100);
+      if (downloaded >= response.contentLength) {
+        completer.complete();
+      }
+    });
+
+    await completer.future;
+    await sink.close();
+  }
+
   /// list the directories and files under given [remotePath].
   ///
   /// Optionally populates the given [props] on the returned files.
+  /// [depth] can be '0', '1' or 'infinity'.
   Future<List<WebDavFile>> ls(
     final String remotePath, {
     final Set<String>? props,
+    final String? depth,
   }) async {
     final response = await _send(
       'PROPFIND',
       _constructPath(remotePath),
       [207, 301],
       data: Stream.value(Uint8List.fromList(utf8.encode(_buildPropsRequest(props ?? {})))),
+      headers: {
+        if (depth != null) ...{
+          'Depth': depth,
+        },
+      },
     );
     if (response.statusCode == 301) {
       return ls(response.headers['location']!.first);
@@ -243,7 +292,7 @@ class WebDavClient {
     final Map<String, String> propFilters, {
     final Set<String> props = const {},
   }) async {
-    final builder = XmlBuilder();
+    final builder = xml.XmlBuilder();
     builder
       ..processing('xml', 'version="1.0"')
       ..element(
@@ -314,7 +363,7 @@ class WebDavClient {
     final String remotePath,
     final Map<String, String> props,
   ) async {
-    final builder = XmlBuilder();
+    final builder = xml.XmlBuilder();
     builder
       ..processing('xml', 'version="1.0"')
       ..element(

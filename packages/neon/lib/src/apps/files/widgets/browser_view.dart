@@ -152,10 +152,10 @@ class _FilesBrowserViewState extends State<FilesBrowserView> {
                                                         details: FileDetails(
                                                           path: uploadTask.path,
                                                           isDirectory: false,
-                                                          size: uploadTask.size,
+                                                          size: uploadTask.stat.size,
                                                           etag: null,
                                                           mimeType: null,
-                                                          lastModified: uploadTask.lastModified,
+                                                          lastModified: uploadTask.stat.modified,
                                                           hasPreview: null,
                                                           isFavorite: null,
                                                         ),
@@ -189,12 +189,12 @@ class _FilesBrowserViewState extends State<FilesBrowserView> {
                                                         path: [...widget.bloc.path.value, file.name],
                                                         isDirectory: matchingUploadTasks.isEmpty && file.isDirectory,
                                                         size: matchingUploadTasks.isNotEmpty
-                                                            ? matchingUploadTasks.first.size
+                                                            ? matchingUploadTasks.first.stat.size
                                                             : file.size!,
                                                         etag: matchingUploadTasks.isNotEmpty ? null : file.etag,
                                                         mimeType: matchingUploadTasks.isNotEmpty ? null : file.mimeType,
                                                         lastModified: matchingUploadTasks.isNotEmpty
-                                                            ? matchingUploadTasks.first.lastModified
+                                                            ? matchingUploadTasks.first.stat.modified
                                                             : file.lastModified!,
                                                         hasPreview:
                                                             matchingUploadTasks.isNotEmpty ? null : file.hasPreview,

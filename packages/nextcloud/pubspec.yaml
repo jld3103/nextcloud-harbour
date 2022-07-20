@@ -10,6 +10,7 @@ dependencies:
   http: ^0.13.4
   intl: ^0.17.0
   meta: ^1.7.0
+  path: ^1.8.1
   xml: ^6.1.0
 
 dev_dependencies:

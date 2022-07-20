@@ -63,11 +63,10 @@ class FilesBloc extends $FilesBloc {
           final stat = await file.stat();
           final task = UploadTask(
             path: event.path,
-            size: stat.size,
-            lastModified: stat.modified,
+            stat: stat,
           );
           _uploadTasksSubject.add(_uploadTasksSubject.value..add(task));
-          await _uploadQueue.add(() => task.execute(client, file.openRead()));
+          await _uploadQueue.add(() => task.execute(client, file));
           _uploadTasksSubject.add(_uploadTasksSubject.value..removeWhere((final t) => t == task));
         },
       );
@@ -184,17 +183,12 @@ class FilesBloc extends $FilesBloc {
     final List<String> path,
     final File file,
   ) async {
-    final sink = file.openWrite();
     try {
-      final task = DownloadTask(
-        path: path,
-      );
+      final task = DownloadTask(path: path);
       _downloadTasksSubject.add(_downloadTasksSubject.value..add(task));
-      await _downloadQueue.add(() => task.execute(client, sink));
+      await _downloadQueue.add(() => task.execute(client, file));
       _downloadTasksSubject.add(_downloadTasksSubject.value..removeWhere((final t) => t == task));
-      await sink.close();
     } catch (e) {
-      await sink.close();
       rethrow;
     }
   }
