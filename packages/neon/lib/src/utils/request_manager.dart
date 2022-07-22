@@ -1,7 +1,9 @@
 part of '../neon.dart';
 
+Cache Function(NeonPlatform) cacheFactory = Cache.new;
+
 Future<RequestManager> getRequestManager(NeonPlatform platform) async {
-  final cache = Cache(platform);
+  final cache = cacheFactory(platform);
   await cache.init();
   return RequestManager(cache);
 }

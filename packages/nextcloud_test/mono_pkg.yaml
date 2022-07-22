@@ -1,0 +1,7 @@
+sdk:
+  - stable
+
+stages:
+  - analyze:
+      - analyze
+      - format: --output=none --set-exit-if-changed --line-length 120 .

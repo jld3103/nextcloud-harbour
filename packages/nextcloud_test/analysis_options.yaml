@@ -1,0 +1,6 @@
+include: package:nit_picking/dart.yaml
+
+linter:
+  rules:
+    prefer_final_parameters: false # Disabled until super.X is no longer complained about in constructors
+    public_member_api_docs: false

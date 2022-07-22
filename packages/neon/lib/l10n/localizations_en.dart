@@ -1,3 +1,6 @@
+
+
+
 import 'localizations.dart';
 
 /// The translations for English (`en`).
@@ -26,8 +29,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get errorCredentialsForAccountNoLongerMatch => 'The credentials for this account no longer match';
 
   @override
-  String get errorServerHadAProblemProcessingYourRequest =>
-      'The server had a problem while processing your request. You might want to try again';
+  String get errorServerHadAProblemProcessingYourRequest => 'The server had a problem while processing your request. You might want to try again';
 
   @override
   String get errorSomethingWentWrongTryAgainLater => 'Something went wrong. Please try again later';
@@ -44,12 +46,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get errorConnectionTimedOut => 'Connection has timed out';
 
   @override
-  String get errorNoCompatibleNextcloudAppsFound =>
-      'No compatible Nextcloud apps could be found.\nWe are working hard to implement more and more apps!';
+  String get errorNoCompatibleNextcloudAppsFound => 'No compatible Nextcloud apps could be found.\nWe are working hard to implement more and more apps!';
 
   @override
-  String get errorServerInMaintenanceMode =>
-      'The server is in maintenance mode. Please try again later or contact the server admin.';
+  String get errorServerInMaintenanceMode => 'The server is in maintenance mode. Please try again later or contact the server admin.';
 
   @override
   String errorMissingPermission(String name) {

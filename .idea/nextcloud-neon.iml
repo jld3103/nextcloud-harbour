@@ -56,6 +56,9 @@
       <excludeFolder url="file://$MODULE_DIR$/packages/neon/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/packages/neon/build" />
       <excludeFolder url="file://$MODULE_DIR$/packages/neon/android/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/nextcloud_test/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/nextcloud_test/build" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/nextcloud_test/.pub" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
