@@ -9,6 +9,8 @@ import 'package:neon/src/neon.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+Future<SharedPreferences> Function() sharedPreferencesFactory = () async => SharedPreferences.getInstance();
+
 Future main() async {
   Env? env;
   try {
@@ -27,7 +29,7 @@ Future main() async {
 
   await Global.init();
 
-  final sharedPreferences = await SharedPreferences.getInstance();
+  final sharedPreferences = await sharedPreferencesFactory();
 
   final platform = await getNeonPlatform();
   final requestManager = await getRequestManager(platform);

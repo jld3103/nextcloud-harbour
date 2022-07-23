@@ -1,4 +1,5 @@
 import 'package:nextcloud/nextcloud.dart';
+import 'package:nextcloud_test/nextcloud_test.dart';
 import 'package:test/test.dart';
 
 import 'helper.dart';

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:nextcloud/nextcloud.dart';
 import 'package:nextcloud_push_proxy/nextcloud_push_proxy.dart';
+import 'package:nextcloud_test/nextcloud_test.dart';
 import 'package:test/test.dart';
 
 import 'helper.dart';
@@ -121,9 +122,7 @@ Future main() async {
     late TestNextcloudClient client;
     setUp(() async {
       client = await TestHelper.getPreparedClient(
-        dockerImageName,
-        username: 'admin',
-        // We need to use app passwords in order to register push devices
+        dockerImageName, username: 'admin', // We need to use app passwords in order to register push devices
         useAppPassword: true,
       );
     });
