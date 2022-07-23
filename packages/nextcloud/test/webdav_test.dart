@@ -47,6 +47,14 @@ Future main() async {
       expect(file.size!, 50598);
     });
 
+    test('List directory recursively', () async {
+      final files = await client.webdav.ls(
+        '/',
+        depth: 'infinity',
+      );
+      expect(files, hasLength(35));
+    });
+
     test('Create directory', () async {
       final response = await client.webdav.mkdir('test');
       expect(response.statusCode, equals(201));
@@ -255,6 +263,24 @@ Future main() async {
         file.getProp('test:custom')!.text,
         'test-custom-prop-value',
       );
+    });
+
+    group('sync', () {
+      test('Download all files', () async {
+        final dir = Directory('/tmp/nextcloud-harbour/${randomPort()}');
+        if (dir.existsSync()) {
+          dir.deleteSync(recursive: true);
+        }
+        dir.createSync(recursive: true);
+        final store = MemoryFileSyncStore(dir);
+
+        var operations = await client.webdav.sync('/', store);
+        expect(operations, hasLength(32));
+        expect(operations.where((final o) => o.type == FileSyncSummaryEntryType.downloaded), hasLength(32));
+
+        operations = await client.webdav.sync('/', store);
+        expect(operations, hasLength(0));
+      });
     });
   });
 }
